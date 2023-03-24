@@ -1,0 +1,10 @@
+steps:  
+  - id: 'tf destroy'
+    name: 'hashicorp/terraform:1.0.0'
+    entrypoint: 'sh'
+    args: 
+    - '-c'
+    - | 
+        echo "branch $BRANCH_NAME"
+          echo "#......Destruction Initiated...please be patient !......#"
+          terraform destroy -auto-approve

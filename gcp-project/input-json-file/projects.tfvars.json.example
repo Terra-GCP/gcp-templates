@@ -1,0 +1,134 @@
+{
+    "projects": [
+        {
+            "billing_account_id": "01EA5D-332E81-34F42D",
+            "project_name": "prj-p-prd-svc",
+            "project_id": "prj-p-15032023-prd-svc",
+            "folder_id": "69720531462",
+            "auto_create_network": false
+        },
+        {
+            "billing_account_id": "01EA5D-332E81-34F42D",
+            "project_name": "prj-p-prd-nsvc",
+            "project_id": "prj-p-15032023-prd-nsvc",
+            "folder_id": "661733818024",
+            "auto_create_network": false
+        },
+        {
+            "billing_account_id": "01EA5D-332E81-34F42D",
+            "project_name": "prj-n-nprd-uat-svc",
+            "project_id": "prj-n-15032023-nprd-uat-svc",
+            "folder_id": "878055549186",
+            "auto_create_network": false
+        },
+        {
+            "billing_account_id": "01EA5D-332E81-34F42D",
+            "project_name": "prj-n-nprd-dev-nsvc",
+            "project_id": "prj-n-15032023-nprd-dev-nsvc",
+            "folder_id": "167977552401",
+            "auto_create_network": false
+        },
+
+        
+
+        {
+            "billing_account_id": "01084C-9D93A7-7D38B6",
+            "project_name": "prj-o-tf-state",
+            "project_id": "prj-o-15032023-tf-state",
+            "folder_id": "972847342120",
+            "auto_create_network": false
+        },
+        {
+            "billing_account_id": "019372-BF58B0-72DAF5",
+            "project_name": "prj-o-tf-demand-sa",
+            "project_id": "prj-o-15032023-tf-demand-sa",
+            "folder_id": "972847342120",
+            "auto_create_network": false
+        },
+        {
+            "billing_account_id": "01084C-9D93A7-7D38B6",
+            "project_name": "prj-o-build",
+            "project_id": "prj-o-15032023-build",
+            "folder_id": "972847342120",
+            "auto_create_network": false
+        },
+
+
+        
+        {
+            "billing_account_id": "01084C-9D93A7-7D38B6",
+            "project_name": "prj-o-prd-shr-nw",
+            "project_id": "prj-o-15032023-prd-shr-nw",
+            "folder_id": "682220142429",
+            "auto_create_network": false
+        },
+        {
+            "billing_account_id": "01084C-9D93A7-7D38B6",
+            "project_name": "prj-o-nprd-shr-nw",
+            "project_id": "prj-o-15032023-nprd-shr-nw",
+            "folder_id": "682220142429",
+            "auto_create_network": false
+        }
+    ],
+
+    "service_project": [
+        {
+            "enable_shared_vpc_service_project": true,
+            "host_project": "prj-o-15032023-prd-shr-nw",
+            "service_project": "prj-p-15032023-prd-svc"
+        },
+        {
+            "enable_shared_vpc_service_project": true,
+            "host_project": "prj-o-15032023-nprd-shr-nw",
+            "service_project": "prj-n-15032023-nprd-uat-svc"
+        }
+    ],
+
+    "apis": [
+        {
+            "project_id": "prj-p-15032023-prd-svc",
+            "gcp_apis_list": ["compute.googleapis.com","servicenetworking.googleapis.com"]
+        },
+        {
+            "project_id": "prj-n-15032023-nprd-uat-svc",
+            "gcp_apis_list": ["compute.googleapis.com","servicenetworking.googleapis.com"]
+        },
+
+
+        {
+            "project_id": "prj-o-15032023-prd-shr-nw",
+            "gcp_apis_list": ["servicenetworking.googleapis.com"]
+        },
+        {
+            "project_id": "prj-o-15032023-nprd-shr-nw",
+            "gcp_apis_list": ["servicenetworking.googleapis.com"]
+        }
+    ],
+
+    "billing_budget": [
+        {
+            "budget_name": "Projects-Budget-Quota-1",
+            "billing_account_id": "01EA5D-332E81-34F42D",
+            "project_id": ["projects/prj-p-15032023-prd-svc","projects/prj-p-15032023-prd-nsvc","projects/prj-n-15032023-nprd-uat-svc","projects/prj-n-15032023-nprd-dev-nsvc"],
+            "budget_amount": 5000,
+            "budget_notify_name": "Projects-Budget-Notification-1",
+            "email_address": "ayush.shukla@hcl.com"
+        },
+        {
+            "budget_name": "Projects-Budget-Quota-2",
+            "billing_account_id": "019372-BF58B0-72DAF5",
+            "project_id": ["projects/prj-o-15032023-tf-state","projects/prj-o-15032023-tf-demand-sa","projects/prj-o-15032023-build"],
+            "budget_amount": 5000,
+            "budget_notify_name": "Projects-Budget-Notification-2",
+            "email_address": "ayush.shukla@hcl.com"
+        },
+        {
+            "budget_name": "Projects-Budget-Quota-3",
+            "billing_account_id": "015361-BF90F3-63A40E",
+            "project_id": ["projects/prj-o-15032023-prd-shr-nw","projects/prj-o-15032023-nprd-shr-nw"],
+            "budget_amount": 5000,
+            "budget_notify_name": "Projects-Budget-Notification-3",
+            "email_address": "ayush.shukla@hcl.com"
+        }
+    ]
+}
