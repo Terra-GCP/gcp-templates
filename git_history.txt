@@ -1,0 +1,10 @@
+git init
+git add -A
+git status
+git remote add origin git@github.com:Terra-GCP/gcp-templates.git
+git status
+git add -A
+git commit -m "Push-24-March-2023"
+git status
+git push
+git push --set-upstream origin master
