@@ -26,3 +26,9 @@ output "Pubsub_Details" {
 output "Job_Scheduler_Details" {
     value = module.job-scheduler
 }
+
+#........................................... Secret ..............................................#
+
+output "Secret_Details" {
+    value = module.secret
+}

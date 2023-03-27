@@ -18,3 +18,6 @@ variable "pubsub" {
 variable "scheduler" {
     sensitive = false
 }
+variable "secret" {
+    sensitive = false
+}

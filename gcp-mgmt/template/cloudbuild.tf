@@ -1,7 +1,7 @@
 #...................................... Cloud Build Trigger ...................................#
 
 /* module "build-trigger" {
-  source                        = "../../modules/terraform-google-cloud-build-trigger"
+  source                        = "git@github.com:Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-build-trigger"
   trigger_name                  = "gcp-tfe-destruction"
   location                      = "europe-north1"
   description                   = "Trigger Terraform resources destruction"
