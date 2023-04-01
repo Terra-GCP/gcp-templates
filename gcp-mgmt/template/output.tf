@@ -32,3 +32,9 @@ output "Job_Scheduler_Details" {
 output "Secret_Details" {
     value = module.secret
 }
+
+#........................................ Build Connection .......................................#
+
+output "Build_Connection_Details" {
+    value = module.build_connection
+}

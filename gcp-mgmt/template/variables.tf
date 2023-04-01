@@ -21,3 +21,6 @@ variable "scheduler" {
 variable "secret" {
     sensitive = false
 }
+variable "build_connection" {
+    sensitive = false
+}

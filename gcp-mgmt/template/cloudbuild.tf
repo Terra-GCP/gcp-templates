@@ -5,6 +5,7 @@ module "build_connection" {
     for k, v in var.build_connection: k => v
     }
   source                        = "git@github.com:Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-build-connection"
+  depends_on                    = [module.secret]
   location                      = each.value.location
   connection_name               = each.value.connection_name
   app_id                        = each.value.app_id
