@@ -6,8 +6,6 @@ variable "project_id" {
 }
 variable "sa" {   
 }
-/* variable "sa_key" {   
-} */
 variable "sa_project_iam_binding" {
 }
 variable "sa_iam_binding" {
@@ -22,5 +20,8 @@ variable "secret" {
     sensitive = false
 }
 variable "build_connection" {
+    sensitive = false
+}
+variable "build_trigger" {
     sensitive = false
 }

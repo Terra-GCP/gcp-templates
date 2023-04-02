@@ -17,22 +17,22 @@ module "build_connection" {
 
 #...................................... Cloud Build Trigger ...................................#
 
-/* module "build_trigger" {
+module "build_trigger" {
   for_each = {
     for k, v in var.build_trigger: k => v
     }
   source                        = "git@github.com:Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-build-trigger"
-  trigger_name                  = "gcp-tfe-destruction"
-  location                      = "europe-north1"
-  description                   = "Trigger Terraform resources destruction"
-  path                          = "./cloud-build-destroy.yaml"
-  repo_type                     = "CLOUD_SOURCE_REPOSITORIES"
-  revision                      = "Prod"
-  subscription                  = "tfe-destruction"
-  topic                         = "tfe-pubsub"
-  project_id                    = "eastern-lodge-374307"
-  repo_name                     = "modules"
-  branch_name                   = "Prod"
-  tags                          = ["build", "newFeature"]
-  logs_bucket                   = "gs://tfe-gcp-scale-delivery-env1/build-trigger-logs/"    
-} */
+  depends_on                    = [module.build_connection]
+  trigger_name                  = each.value.trigger_name 
+  location                      = each.value.location
+  disabled                      = each.value.disabled
+  project_id                    = each.value.project_id
+  #build_logs                    = each.value.build_logs
+  description                   = each.value.description 
+  path                          = each.value.path
+  uri                           = each.value.uri
+  repo_type                     = each.value.repo_type
+  revision                      = each.value.revision
+  topic                         = each.value.topic
+  approval_required             = each.value.approval_required
+}
