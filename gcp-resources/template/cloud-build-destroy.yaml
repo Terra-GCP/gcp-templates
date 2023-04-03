@@ -7,6 +7,7 @@ steps:
     - | 
         echo "branch $BRANCH_NAME"
         echo "#......Destruction Initiated...please be patient !......#"
+        cd gcp-resources/template/cloud-build-destroy.yaml
         ls; cp ../input-json-file/resources.tfvars.json .
         pwd; mv resources.tfvars.json resources.auto.tfvars.json
         terraform destroy -auto-approve
