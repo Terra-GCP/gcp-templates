@@ -6,6 +6,7 @@ steps:
     - '-c'
     - | 
         echo "branch $BRANCH_NAME"
+        ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
         echo "#......Destruction Initiated...please be patient !......#"
         ls -lrt; cd gcp-resources/template/
         cp ../input-json-file/resources.tfvars.json .
