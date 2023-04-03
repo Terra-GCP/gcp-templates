@@ -1,6 +1,6 @@
 steps:  
   - id: 'tf destroy'
-    name: 'ubuntu'
+    name: 'hashicorp/terraform:latest'
     entrypoint: 'sh'
     args: 
     - '-c'
@@ -9,12 +9,9 @@ steps:
         echo "-------------------------------------------------------------------------------------"
         echo "-------------------------------------------------------------------------------------"
 
-        ssh-keygen -f ~root/.ssh/id_rsa -N ''
-        ssh-keygen -R github.com
-        ssh-keyscan -t rsa github.com >> ~root/.ssh/known_hosts
-
         echo "#......Destruction Initiated...please be patient !......#"
         ls -lrt; cd gcp-resources/template/
+        git clone git@github.com:Terra-GCP/gcp-kitchen-modules.git
         cp ../input-json-file/resources.tfvars.json .
         pwd; mv resources.tfvars.json resources.auto.tfvars.json
         
