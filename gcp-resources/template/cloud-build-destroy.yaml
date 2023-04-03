@@ -10,4 +10,6 @@ steps:
         ls -lrt; cd gcp-resources/template/
         cp ../input-json-file/resources.tfvars.json .
         pwd; mv resources.tfvars.json resources.auto.tfvars.json
+        
+        terraform init --upgrade
         terraform destroy -auto-approve
