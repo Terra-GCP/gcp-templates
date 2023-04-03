@@ -1,13 +1,28 @@
 steps:  
   - id: 'tf destroy'
-    name: 'hashicorp/terraform:1.0.0'
+    name: 'ubuntu'
     entrypoint: 'sh'
     args: 
     - '-c'
     - | 
-        echo "branch $BRANCH_NAME"
+
+        echo "-------------------------------------------------------------------------------------"
+        echo "-------------------------------------------------------------------------------------"
+        echo "#........... Installing Curl & wget...please be patient !! .............#"
+        apt install curl -y
+        apt install wget -y
+
+        echo "-------------------------------------------------------------------------------------"
+        echo "-------------------------------------------------------------------------------------"
+        echo "#............ Downloading Terraform...please be patient !! .............#"
+        wget https://releases.hashicorp.com/terraform/1.0.7/terraform_1.0.7_linux_amd64.zip
+        apt-get install unzip
+        unzip terraform_1.0.7_linux_amd64.zip
+        mv terraform /usr/local/bin/
+
         ssh-keygen -R github.com
         ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
         echo "#......Destruction Initiated...please be patient !......#"
         ls -lrt; cd gcp-resources/template/
         cp ../input-json-file/resources.tfvars.json .
