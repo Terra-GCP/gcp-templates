@@ -7,6 +7,6 @@ steps:
     - | 
         echo "branch $BRANCH_NAME"
           echo "#......Destruction Initiated...please be patient !......#"
-          cp ../input-json-file/resources.tfvars.json .
+          cp ./gcp-resources/input-json-file/resources.tfvars.json .
           mv resources.tfvars.json resources.auto.tfvars.json
           terraform destroy -auto-approve

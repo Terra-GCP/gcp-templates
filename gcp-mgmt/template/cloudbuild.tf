@@ -27,8 +27,7 @@ module "build_trigger" {
   location                      = each.value.location
   disabled                      = each.value.disabled
   project_id                    = each.value.project_id
-  #build_logs                    = each.value.build_logs
-  description                   = each.value.description 
+  description                   = each.value.description
   path                          = each.value.path
   uri                           = each.value.uri
   repo_type                     = each.value.repo_type
