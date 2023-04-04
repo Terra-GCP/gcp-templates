@@ -10,12 +10,8 @@ steps:
         echo "-------------------------------------------------------------------------------------"
 
         echo "#......Destruction Initiated...please be patient !......#"
-
-        git clone git@github.com:Terra-GCP/gcp-kitchen-modules.git
          
         ls -lrt; cd gcp-resources/template/
-        mkdir -p .terraform/modules/VM/
-        cp * ../../gcp-kitchen-modules/* .terraform/modules/VM/
         
         cp ../input-json-file/resources.tfvars.json .
         pwd; mv resources.tfvars.json resources.auto.tfvars.json
