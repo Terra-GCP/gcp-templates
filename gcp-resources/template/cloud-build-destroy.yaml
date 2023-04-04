@@ -11,7 +11,11 @@ steps:
 
         mkdir ~/.ssh
         chmod 700 ~/.ssh
+        touch ~/.ssh/known_hosts
         ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+
+        echo "HOST *" > ~/.ssh/config
+        echo "StrictHostKeyChecking no" >> ~/.ssh/config
 
         echo "#......Destruction Initiated...please be patient !......#"
          
