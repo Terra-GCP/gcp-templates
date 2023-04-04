@@ -1,6 +1,6 @@
 steps:  
   - id: 'tf destroy'
-    name: 'hashicorp/terraform:latest'
+    name: 'ubuntu'
     entrypoint: 'sh'
     args: 
     - '-c'
