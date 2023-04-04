@@ -1,1 +1,0 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"VM","Source":"git::ssh://git@github.com/Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-instance","Dir":".terraform/modules/VM/terraform-google-cloud-instance"}]}

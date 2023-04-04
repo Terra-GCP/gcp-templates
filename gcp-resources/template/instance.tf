@@ -17,3 +17,10 @@ module "VM" {
   labels        = each.value.labels
   metadata      = each.value.metadata
 }
+
+/* SSH
+"git@github.com:Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-instance"
+
+https
+"git::https://github.com/Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-instance" */
+
