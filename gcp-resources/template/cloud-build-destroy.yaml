@@ -9,6 +9,9 @@ steps:
         echo "-------------------------------------------------------------------------------------"
         echo "-------------------------------------------------------------------------------------"
 
+        git config --global user.email "ayush25shukla@gmail.com"
+        git config --global user.name "Ayush Shukla"
+
         echo "#......Destruction Initiated...please be patient !......#"
          
         ls -lrt; cd gcp-resources/template/
