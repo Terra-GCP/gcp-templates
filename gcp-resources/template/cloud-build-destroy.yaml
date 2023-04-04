@@ -9,8 +9,9 @@ steps:
         echo "-------------------------------------------------------------------------------------"
         echo "-------------------------------------------------------------------------------------"
 
-        git config --global user.email "ayush25shukla@gmail.com"
-        git config --global user.name "Ayush Shukla"
+        mkdir ~/.ssh
+        chmod 700 ~/.ssh
+        ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 
         echo "#......Destruction Initiated...please be patient !......#"
          
