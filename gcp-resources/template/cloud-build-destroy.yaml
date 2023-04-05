@@ -1,7 +1,7 @@
 steps:  
   - id: 'tf destroy'
     name: 'hashicorp/terraform:latest'
-    entrypoint: 'sh'
+    entrypoint: '/'
     args: 
     - '-c'
     - | 
@@ -9,7 +9,7 @@ steps:
         echo "-------------------------------------------------------------------------------------"
         echo "-------------------------------------------------------------------------------------"
 
-        git config --global url."https://oauth2:${{ secrets.CB_Auth }}@github.com".insteadOf ssh://git@github.com
+        git config --global url."https://oauth2:${{ secrets.CB_Auth }}@github.com/Terra-GCP".insteadOf ssh://git@github.com
 
         echo "#......Destruction Initiated...please be patient !......#"
          
