@@ -9,8 +9,6 @@ steps:
         echo "-------------------------------------------------------------------------------------"
         echo "-------------------------------------------------------------------------------------"
 
-        git config --global url."https://Terra-GCP:${{ secrets.GITHUB_TOKEN }}@github.com".insteadOf ssh://git@github.com
-
         echo "#......Destruction Initiated...please be patient !......#"
          
         ls -lrt; cd gcp-resources/template/
