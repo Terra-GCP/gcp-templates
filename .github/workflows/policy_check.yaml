@@ -46,7 +46,8 @@ jobs:
     - run: |
         cd gcp-resources/template
         terraform init
-        terraform plan -var-file=../input-json-file/resources.tfvars.json -out=../plan-file/resources-tf-plan.json
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../plan-file/resources.tfplan"
+        terraform show -json resources.tfplan > resources.json
         
     - uses: fugue/regula-action@v2.6.1
       with:
