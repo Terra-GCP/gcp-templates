@@ -25,6 +25,12 @@ jobs:
       with:
         input_path: gcp-resources/template
         include: gcp-resources/opa-policy
+
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+          credentials_json: ${{secrets.GCP_SA_KEY}}
+          service_account: ${{secrets.GCP_SA_EMAIL}}
     
   regula_tf_plan_job:
     runs-on: ubuntu-latest
@@ -40,10 +46,7 @@ jobs:
         cd gcp-resources/template
         terraform init
         terraform plan -var-file=../input-json-file/resources.tfvars.json -out=../plan-file/resources-tf-plan.json
-
-      env:
-          credentials_json: ${{secrets.GCP_SA_KEY}}
-          service_account: ${{secrets.GCP_SA_EMAIL}}
+        
     - uses: fugue/regula-action@v2.6.1
       with:
         input_path: gcp-resources/plan-file/resources-tf-plan.json
