@@ -50,4 +50,4 @@ jobs:
       run: |
         cd gcp-resources/opa-policy/
         pwd; ls -lrt
-        opa eval --format pretty --data policy.rego --input ../opa-policy/tf-plan.json "data.terraform"
+        opa eval --format pretty --data policy.rego --input tf-plan.json "data.terraform"
