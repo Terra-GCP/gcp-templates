@@ -33,8 +33,8 @@ jobs:
     - run: |
         cd gcp-resources/template/
         terraform init
-        terraform force-unlock -force 1681925848459389
-        terraform plan -lock=false -var-file="../input-json-file/resources.tfvars.json" -out tf.plan
+        terraform force-unlock -force 1681927083539459
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out tf.plan
         terraform plan -out tf.plan
         terraform show -json tf.plan > tfplan.json
     
@@ -53,9 +53,3 @@ jobs:
         cd gcp-resources/opa-policy/
         pwd; ls -lrt
         opa eval --format pretty --data policy.rego --input ../template/tfplan.json "data.terraform"
-
-    - uses: open-policy-agent/setup-opa@v2
-      with:
-        input_path: gcp-resources/template/tfplan.json
-        input_type: tf-plan
-        include: gcp-resources/opa-policy
