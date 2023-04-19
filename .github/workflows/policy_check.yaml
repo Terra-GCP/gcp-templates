@@ -33,12 +33,8 @@ jobs:
     - run: |
         cd gcp-resources/template/
         terraform init
-        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../opa-policy/resources-tf-plan.json" 
-    
-  Run-OPA-Tests:
-    runs-on: ubuntu-latest
-    name: OPA Policy Check
-    steps:
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../opa-policy/resources-tf-plan.json"
+
     - uses: actions/checkout@v3
     - uses: open-policy-agent/setup-opa@v2
       with:
