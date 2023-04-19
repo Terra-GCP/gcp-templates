@@ -33,7 +33,8 @@ jobs:
     - run: |
         cd gcp-resources/template/
         terraform init
-        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../plan-file/resources-tf-plan.json"
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../plan-file/resources-tf-plan.plan"
+        terraform show -json ../plan-file/resources-tf-plan.plan > ../plan-file/resources-tf-plan.json
     
   Run-OPA-Tests:
     runs-on: ubuntu-latest
