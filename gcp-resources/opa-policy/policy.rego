@@ -67,7 +67,7 @@ deny[reason] {
 # Allowed sizes by provider
 
 allowed_types = {
-    "google": ["n1-standard-1", "e2-medium"]
+    "google": ["n1-standard-2", "e3-medium"]
 }
 
 # Attribute name for instance type/size by provider
