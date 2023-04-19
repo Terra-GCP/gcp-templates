@@ -13,7 +13,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  tf_job:
+  TF-PLAN:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     name: Terraform plan JSON
@@ -33,16 +33,18 @@ jobs:
     - run: |
         cd gcp-resources/template/
         terraform init
-        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../opa-policy/resources-tf-plan.json"
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../opa-policy/resources-tf-plan.json" 
     
-    
-  opa_policy_job:
+  Run-OPA-Tests:
     runs-on: ubuntu-latest
     name: OPA Policy Check
     steps:
     - uses: actions/checkout@v3
-    - uses: openpolicyagent/setup-opa@v1
-
-    - run: |
+    - uses: open-policy-agent/setup-opa@v2
+      with:
+        version: latest
+        
+    - name: Run OPA Tests
+      run: |
         cd gcp-resources/opa-policy/
         opa eval --format pretty --data policy.rego --input resources-tf-plan.json "data.terraform"
