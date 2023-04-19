@@ -13,44 +13,33 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  regula_tf_job:
+  tf_job:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    name: Regula Terraform
+    name: Terraform plan JSON
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Runs a single command using the runners shell
     - uses: actions/checkout@v3
-    - uses: fugue/regula-action@v3.2.1
-      with:
-        input_path: gcp-resources/template
-        include: gcp-resources/opa-policy
-    
-  regula_tf_plan_job:
-    runs-on: ubuntu-latest
-    name: Regula on a Terraform plan JSON
-    steps:
-    - uses: actions/checkout@v3
     - uses: hashicorp/setup-terraform@v1
-      with:
-        # See the note below for why this option is necessary.
-        terraform_wrapper: false
-        terraform_version: 1.0.8
+    - run: |
+        cd gcp-resources/template/
+        terraform init
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../opa-policy/resources-tf-plan.json"
 
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}
+    
+  opa_policy_job:
+    runs-on: ubuntu-latest
+    name: OPA Policy Check
+    steps:
+    - uses: actions/checkout@v3
+    - uses: openpolicyagent/setup-opa@v1
 
     - run: |
-        cd gcp-resources/template
-        terraform init
-        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../plan-file/resources-tf-plan.tfplan"
-        terraform show -json ../plan-file/resources-tf-plan.tfplan > ../plan-file/resources-tf-plan.json
-        
-    - uses: fugue/regula-action@v2.6.1
-      with:
-        input_path: gcp-resources/plan-file/resources-tf-plan.json
-        input_type: tf-plan
-        include: gcp-resources/opa-policy
+        cd gcp-resources/opa-policy/
+        opa eval --format pretty --data policy.rego --input resources-tf-plan.json "data.terraform"
