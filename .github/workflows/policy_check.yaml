@@ -33,6 +33,7 @@ jobs:
     - run: |
         cd gcp-resources/template/
         terraform init
+        terraform force-unlock -force 1681925848459389
         terraform plan -lock=false -var-file="../input-json-file/resources.tfvars.json" -out tf.plan
         terraform plan -out tf.plan
         terraform show -json tf.plan > tfplan.json
