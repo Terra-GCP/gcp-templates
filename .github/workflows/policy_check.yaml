@@ -34,7 +34,7 @@ jobs:
         cd gcp-resources/template/
         terraform init
         terraform force-unlock -force 1681927728372579
-        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../plan-file/resources-tf-plan.json
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../plan-file/resources-tf-plan.json"
     
   Run-OPA-Tests:
     runs-on: ubuntu-latest
