@@ -23,19 +23,18 @@ jobs:
       # Runs a single command using the runners shell
     - uses: actions/checkout@v3
     - uses: hashicorp/setup-terraform@v1
-    - run: |
-        cd gcp-resources/template/
-        terraform init
-        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../opa-policy/resources-tf-plan.json"
 
-    - name: Checkout
-      uses: actions/checkout@v3
-      
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}
+
+    - run: |
+        cd gcp-resources/template/
+        terraform init
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../opa-policy/resources-tf-plan.json"
+    
     
   opa_policy_job:
     runs-on: ubuntu-latest
