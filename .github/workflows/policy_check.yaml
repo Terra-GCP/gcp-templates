@@ -49,7 +49,7 @@ jobs:
     - name: Run OPA Tests
       run: |
         cd gcp-resources/opa-policy/
-        ls -lrt
+        pwd; ls -lrt
         opa eval --format pretty --data policy.rego --input ../template/tfplan.json "data.terraform"
 
     - uses: open-policy-agent/setup-opa@v2
