@@ -30,12 +30,6 @@ jobs:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}
 
-    - run: |
-        cd gcp-resources/template/
-        terraform init
-        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="tfplan.plan"
-        terraform show -json tfplan.plan > tfplan.json
-    
     - uses: actions/checkout@v3
     - uses: open-policy-agent/setup-opa@v2
       with:
@@ -43,8 +37,8 @@ jobs:
         
     - name: Run OPA Tests
       run: |
-        cd gcp-resources/opa-policy/
-        pwd; ls -lrt ../template/ 
-        opa eval --format pretty --data policy.rego --input ../template/tfplan.json "data.terraform"
-    
-  
+        cd gcp-resources/template/
+        terraform init
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="tfplan.plan"
+        terraform show -json tfplan.plan > tfplan.json
+        opa eval --format pretty --data ../opa-policy/policy.rego --input tfplan.json "data.terraform"
