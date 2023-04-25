@@ -1,1 +1,0 @@
-{"Path":".","Version":"2.0","Modules":[{"Key":"VM","Source":"git::https://github.com/Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-instance","Dir":".infracost/terraform_modules/89961860342b2940d9e8b38404ae7f21/terraform-google-cloud-instance"}]}
