@@ -45,6 +45,6 @@ jobs:
 
     - uses: open-policy-agent/setup-opa@v2
       with:
-        input_path: gcp-resources/template/tfplan.json
-        input_type: tf-plan
-        include: gcp-resources/opa-policy
+          input_path: gcp-resources/template/tfplan.json
+          input_type: tf-plan
+          include: gcp-resources/opa-policy
