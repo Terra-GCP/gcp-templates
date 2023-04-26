@@ -51,9 +51,8 @@ jobs:
         tar xzf conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz 
         sudo mv conftest /usr/local/bin
 
-        terraform init
-        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out tfplan.plan
-        terraform show -json tfplan.plan > tfplan.json
+        terraform init -upgrade
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out tfplan.json -format json
 
         conftest test tfplan.json -p ../opa-policy/policy.rego
 
