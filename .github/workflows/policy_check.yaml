@@ -53,7 +53,7 @@ jobs:
 
         terraform init
         terraform plan -var-file="../input-json-file/resources.tfvars.json" -out tfplan.plan
-        terraform show -json tfplan.json
+        terraform show -json tfplan.plan > tfplan.json
 
         conftest test tfplan.json -p ../opa-policy/policy.rego
 
