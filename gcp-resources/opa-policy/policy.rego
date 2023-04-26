@@ -69,7 +69,7 @@ deny[msg] {
 #..................................... Deny if project does not match ..................................#
 
 # Restrict all resources to one project
-required_project = "gcp-prod-project"
+required_project = "prj-n-nprd-uat-svc"
 
 deny[msg] {
 	resource := tfplan.resource_changes[_]
@@ -85,7 +85,7 @@ deny[msg] {
 
 # Enforce a list of allowed locations / availability zones
 allowed_locations = {
-    "google": ["us-central1-a", "us-central1-b", "us-west1-a"]
+    "google": ["us-central1-a", "us-central1-b", "us-west1-a", "aisa-south2-a"]
 }
 eval_expression(plan, expr) = constant_value {
     constant_value := expr.constant_value
