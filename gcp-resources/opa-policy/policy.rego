@@ -16,7 +16,7 @@ get_basename(path) = basename{
 #................................... Deny if machine type not allowed ..................................#
 
 allowed_types = {
-    "google": ["n1-standard-2", "e3-medium"]
+    "google": ["n1-standard-1", "e3-medium"]
 }
 
 # Attribute name for instance type/size by provider
@@ -69,7 +69,7 @@ deny[msg] {
 #..................................... Deny if project does not match ..................................#
 
 # Restrict all resources to one project
-required_project = "prj-n-nprd-uat-svc"
+required_project = "prj-n-15032023-nprd-uat-svc"
 
 deny[msg] {
 	resource := tfplan.resource_changes[_]
