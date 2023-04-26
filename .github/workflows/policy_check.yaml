@@ -46,7 +46,7 @@ jobs:
         files: gcp-resources/input-json-file/resources.tfvars.json
         policy: gcp-resources/opa-policy/policy.rego
         
-        run: |
+      run: |
         cd gcp-resources/template/
         terraform init
         terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="tfplan.plan"
