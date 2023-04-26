@@ -25,18 +25,19 @@ jobs:
         # See the note below for why this option is necessary.
         terraform_wrapper: false
         terraform_version: 1.0.8
-    - run: |
-        cd gcp-resources/template/
-        cp ../input-json-file/resources.tfvars.json resources.auto.tfvars.json
-        terraform init
-        terraform plan -refresh=false -out="plan.tfplan"
-        terraform show -json plan.tfplan > plan.json
 
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}
+          
+    - run: |
+        cd gcp-resources/template/
+        cp ../input-json-file/resources.tfvars.json resources.auto.tfvars.json
+        terraform init
+        terraform plan -refresh=false -out="plan.tfplan"
+        terraform show -json plan.tfplan > plan.json
 
     - uses: fugue/regula-action@v2.6.1
       with:
