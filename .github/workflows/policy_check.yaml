@@ -46,6 +46,7 @@ jobs:
     - name: Run OPA Tests      
       run: |
         cd gcp-resources/template/
+        cp ../opa-policy/policy.rego .
 
         LATEST_VERSION=$(wget -O - "https://api.github.com/repos/open-policy-agent/conftest/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | cut -c 2-)
         wget "https://github.com/open-policy-agent/conftest/releases/download/v${LATEST_VERSION}/conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz"
@@ -55,6 +56,6 @@ jobs:
         terraform init -upgrade
         terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="resources.plan"
         terraform show -json resources.plan > resources.json
-        conftest test resources.json -p ../opa-policy/policy.rego
+        conftest test resources.json -p policy.rego
 
         
