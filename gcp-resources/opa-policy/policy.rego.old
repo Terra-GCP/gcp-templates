@@ -92,13 +92,6 @@ deny[reason] {
         [resource.address, instance_type]
     )
 }
-deny[msg] {
-    resource := tfplan.resource_changes[_]
-    instance_type := get_instance_type(resource)
-    provider_name := get_basename(resource.provider_name)
-    not array_contains(allowed_types[provider_name], instance_type)
-    msg := "Selected Instance Type not allowed"
-}
 
 #................................ Block protocols that aren't TCP ................................#
 
