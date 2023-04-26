@@ -35,7 +35,7 @@ jobs:
         version: latest
     
     - uses: actions/checkout@v3
-    - uses: instrumenta/conftest
+    - uses: instrumenta/conftest-action@master
       with:
         version: latest
 
