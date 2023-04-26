@@ -16,7 +16,7 @@ get_basename(path) = basename{
 #................................... Deny if machine type not allowed ..................................#
 
 allowed_types = {
-    "google": ["n1-standard-1", "e3-medium"]
+    "google": ["n1-standard-2", "e3-medium"]
 }
 
 # Attribute name for instance type/size by provider
@@ -30,12 +30,16 @@ get_instance_type(resource) = instance_type {
     instance_type := resource.change.after[instance_type_key[provider_name]]
 }
 
-deny[msg] {
+deny[reason] {
     resource := tfplan.resource_changes[_]
     instance_type := get_instance_type(resource)
     provider_name := get_basename(resource.provider_name)
     not array_contains(allowed_types[provider_name], instance_type)
-    msg := "Selected Instance Type not allowed"
+
+    reason := sprintf(
+        "%s: instance type %q is not allowed",
+        [resource.address, instance_type]
+    )
 }
 
 #..................................... Deny if resource not allowed ....................................#
