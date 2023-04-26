@@ -85,7 +85,7 @@ deny[msg] {
 
 # Enforce a list of allowed locations / availability zones
 allowed_locations = {
-    "google": ["us-central1-a", "us-central1-b", "us-west1-a", "aisa-south2-a"]
+    "google": ["us-central1-a", "us-central1-b", "us-west1-a", "asia-south2-a"]
 }
 eval_expression(plan, expr) = constant_value {
     constant_value := expr.constant_value
