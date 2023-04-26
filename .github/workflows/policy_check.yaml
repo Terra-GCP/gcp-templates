@@ -45,7 +45,8 @@ jobs:
       with:
         files: gcp-resources/input-json-file/resources.tfvars.json
         policy: gcp-resources/opa-policy/policy.rego
-        
+
+    - name: Run OPA Tests      
       run: |
         cd gcp-resources/template/
         terraform init
