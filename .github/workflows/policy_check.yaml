@@ -52,6 +52,6 @@ jobs:
         tar xzf conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz
         sudo mv conftest /usr/local/bin
 
-        conftest test ./gcp-resources/template/tfplan.json -p ./gcp-resources/opa-policy/policy.rego
+        conftest test tfplan.json -p ../opa-policy/policy.rego
 
         
