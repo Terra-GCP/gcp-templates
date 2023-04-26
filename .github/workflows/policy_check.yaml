@@ -33,11 +33,6 @@ jobs:
     - uses: open-policy-agent/setup-opa@v2
       with:
         version: latest
-    
-    - uses: actions/checkout@v3
-    - uses: instrumenta/conftest-action@master
-      with:
-        version: latest
 
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
@@ -48,6 +43,11 @@ jobs:
     - name: Run OPA Tests      
       run: |
         cd gcp-resources/template/
+
+        LATEST_VERSION=$(wget -O - "https://api.github.com/repos/open-policy-agent/conftest/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | cut -c 2-)
+        wget "https://github.com/open-policy-agent/conftest/releases/download/v${LATEST_VERSION}/conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz"
+        tar xzf conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz sudo mv conftest /usr/local/bin
+        
         terraform init
         terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="tfplan.plan"
         terraform show -json tfplan.plan > tfplan.json
