@@ -170,7 +170,7 @@ deny[msg] {
 
 #....................................... Block banned labels ......................................#
 
-banned_ports = {
+banned_labels = {
                 "env": "1",
                 "linux_patch_mgmt": "enabled"
                 }

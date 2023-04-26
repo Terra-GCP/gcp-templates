@@ -53,8 +53,7 @@ jobs:
         sudo mv conftest /usr/local/bin
 
         terraform init -upgrade
-        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="tfplan.plan"
-        terraform show -json tfplan.plan > tfplan.json
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="tfplan.json"
 
         conftest test tfplan.json -p ../opa-policy/policy.rego
 
