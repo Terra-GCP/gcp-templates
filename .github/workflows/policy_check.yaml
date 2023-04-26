@@ -33,18 +33,17 @@ jobs:
     - uses: open-policy-agent/setup-opa@v2
       with:
         version: latest
+    
+    - uses: actions/checkout@v3
+    - uses: instrumenta/conftest-action@master
+      with:
+        version: latest
 
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}
-    
-    - uses: actions/checkout@v3
-    - uses: instrumenta/conftest-action@master
-      with:
-        files: gcp-resources/input-json-file/resources.tfvars.json
-        policy: gcp-resources/opa-policy/policy.rego
 
     - name: Run OPA Tests      
       run: |
