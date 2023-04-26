@@ -54,7 +54,7 @@ jobs:
 
         terraform init -upgrade
         terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="../plan-file/tfplan.plan"
-        terraform show -json tfplan.plan > tfplan.json
-        conftest test tfplan.json -p ../opa-policy/policy.rego
+        terraform show -json ../plan-file/tfplan.plan > ../plan-file/tfplan.json
+        conftest test ../plan-file/tfplan.json --p ../opa-policy/policy.rego
 
         
