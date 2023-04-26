@@ -1,0 +1,44 @@
+name: OPA Policy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "Test" branch
+  push:
+    branches: 
+      - Test
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  TF-OPA-Check:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    name: TF-OPA-Check
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      # Runs a single command using the runners shell
+    - uses: actions/checkout@v3
+    - uses: hashicorp/setup-terraform@v1
+
+    - uses: actions/checkout@v3
+    - uses: open-policy-agent/setup-opa@v2
+      with:
+        version: latest
+
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+          credentials_json: ${{secrets.GCP_SA_KEY}}
+          service_account: ${{secrets.GCP_SA_EMAIL}}
+        
+    - name: Run OPA Tests
+      run: |
+        cd gcp-resources/template/
+        terraform init
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="tfplan.plan"
+        terraform show -json tfplan.plan > tfplan.json
+        opa eval --format pretty --data ../opa-policy/policy.rego --input tfplan.json "data.terraform"
