@@ -35,7 +35,7 @@ jobs:
         version: latest
     
     - uses: actions/checkout@v3
-    - uses: open-policy-agent/setup-conftest@v2
+    - uses: open-policy-agent/conftest
       with:
         version: latest
 
