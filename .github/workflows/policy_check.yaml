@@ -1,46 +1,44 @@
+name: OPA Policy
+
+# Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "Test" branch
   push:
     branches: 
       - Test
 
-jobs:
-  regula_tf_job:
-    runs-on: ubuntu-latest
-    name: Regula Terraform
-    steps:
-    - uses: actions/checkout@master
-    - uses: fugue/regula-action@v3.2.1
-      with:
-        input_path: gcp-resources/template
-        include: gcp-resources/opa-policy
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
-  regula_tf_plan_job:
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  TF-OPA-Check:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    name: Regula on a Terraform plan JSON
+    name: TF-OPA-Check
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@master
+
+      # Runs a single command using the runners shell
+    - uses: actions/checkout@v3
     - uses: hashicorp/setup-terraform@v1
+
+    - uses: actions/checkout@v3
+    - uses: open-policy-agent/setup-opa@v2
       with:
-        # See the note below for why this option is necessary.
-        terraform_wrapper: false
-        terraform_version: 1.0.8
+        version: latest
 
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}
-          
-    - run: |
+        
+    - name: Run OPA Tests
+      run: |
         cd gcp-resources/template/
-        cp ../input-json-file/resources.tfvars.json resources.auto.tfvars.json
         terraform init
-        terraform plan -refresh=false -out="plan.tfplan"
-        terraform show -json plan.tfplan > plan.json
-
-    - uses: fugue/regula-action@v2.6.1
-      with:
-        input_path: gcp-resources/template/plan.json
-        input_type: tf-plan
-        include: gcp-resources/opa-policy
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="tfplan.plan"
+        terraform show -json tfplan.plan > tfplan.json
+        opa eval --format pretty --data ../opa-policy/policy.rego --input tfplan.json "data.main"
