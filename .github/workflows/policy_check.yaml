@@ -37,7 +37,8 @@ jobs:
     - uses: actions/checkout@v3
     - uses: instrumenta/conftest-action@master
       with:
-        version: latest
+        files: gcp-resources/input-json-file/resources.tfvars.json
+        policy: gcp-resources/opa-policy/policy.rego
 
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
