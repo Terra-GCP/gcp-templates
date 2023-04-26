@@ -19,7 +19,7 @@ get_basename(path) = basename{
 
 allowed_resources = [
 "google_compute_instance",
-"google_os_config_patch_deployment",,
+"google_os_config_patch_deployment",
 ]
 
 deny[reason] {
