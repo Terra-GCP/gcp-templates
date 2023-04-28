@@ -38,7 +38,7 @@ jobs:
         version: latest
 
     - uses: actions/checkout@v2
-    - uses: instrumenta/conftest-action@v0.4
+    - uses: instrumenta/conftest-action@v0
       with:
         pattern: "*.rego"
 
