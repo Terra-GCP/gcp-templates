@@ -33,7 +33,7 @@ jobs:
           terraform_wrapper: false
       
       - name: Terraform init
-        env:
+        with:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}        
         working-directory: ${{ env.working-directory }}
