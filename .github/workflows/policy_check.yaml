@@ -80,13 +80,7 @@ jobs:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
 
       - name: Cost Estimation
-        run: infracost breakdown --path resources.json --format json --out-file /tmp/infracost.json
-        working-directory: ${{ env.working-directory }}
-    
-      - name: Post Infracost comment
         run: |
-          infracost comment github --path /tmp/infracost.json \
-                                  --repo $GITHUB_REPOSITORY \
-                                  --github-token ${{github.token}} \
-                                  --pull-request ${{github.event.pull_request.number}} \
-                                  --behavior update
+          infracost breakdown --path resources.json --format json --out-file /tmp/infracost.json
+          infracost diff --path resources.json
+        working-directory: ${{ env.working-directory }}
