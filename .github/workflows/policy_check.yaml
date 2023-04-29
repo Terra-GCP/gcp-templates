@@ -81,6 +81,7 @@ jobs:
 
       - name: Cost Estimation
         run: |
+          infracost breakdown --path resources.json
           infracost breakdown --path resources.json --format json --out-file /tmp/infracost.json
           infracost diff --path resources.json
         working-directory: ${{ env.working-directory }}
