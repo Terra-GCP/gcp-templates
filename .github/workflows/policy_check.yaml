@@ -31,22 +31,22 @@ jobs:
         with:
           version: latest
           terraform_wrapper: false
-
+      
       - name: Terraform init
-        run: terraform init -upgrade
         env:
           credentials_json: ${{secrets.GCP_SA_KEY}}
-          service_account: ${{secrets.GCP_SA_EMAIL}}
+          service_account: ${{secrets.GCP_SA_EMAIL}}        
         working-directory: ${{ env.working-directory }}
+        run: terraform init -upgrade
 
-      - name: Terraform plan
+      - name: Terraform Plan
         run: terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="resources.plan"
         env:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}        
         working-directory: ${{ env.working-directory }}
       
-      - name: Terraform show
+      - name: Terraform Show
         run: terraform show -json resources.plan > resources.json
         env:
           credentials_json: ${{secrets.GCP_SA_KEY}}
