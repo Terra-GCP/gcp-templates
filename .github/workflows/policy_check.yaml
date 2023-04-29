@@ -73,63 +73,20 @@ jobs:
           service_account: ${{secrets.GCP_SA_EMAIL}}
         working-directory: ${{ env.working-directory }}
 
-
-  TF-Cost-Estimation:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    name: TF-Cost-Estimation
-    needs: TF-OPA-Check
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-
-      # Runs a single command using the runners shell
-    - name: Check out repository
-      uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-    - name: Install Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        version: latest
-        terraform_wrapper: false
-
-    - name: Terraform init
-      run: terraform init -upgrade
-      env:
-        credentials_json: ${{secrets.GCP_SA_KEY}}
-        service_account: ${{secrets.GCP_SA_EMAIL}}
-      working-directory: ${{ env.working-directory }}
-
-    - name: Terraform plan
-      run: terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="resources.plan"
-      env:
-        credentials_json: ${{secrets.GCP_SA_KEY}}
-        service_account: ${{secrets.GCP_SA_EMAIL}}        
-      working-directory: ${{ env.working-directory }}
       
-    - name: Terraform show
-      run: terraform show -json resources.plan > resources.json
-      env:
-        credentials_json: ${{secrets.GCP_SA_KEY}}
-        service_account: ${{secrets.GCP_SA_EMAIL}}
-      working-directory: ${{ env.working-directory }}
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v1
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
 
-    - name: Setup Infracost
-      uses: infracost/actions/setup@v1
-      with:
-        api-key: ${{ secrets.INFRACOST_API_KEY }}
-
-    - name: Cost Estimation
-      run: infracost breakdown --path resources.json --format json --out-file /tmp/infracost.json
-      working-directory: ${{ env.working-directory }}
+      - name: Cost Estimation
+        run: infracost breakdown --path resources.json --format json --out-file /tmp/infracost.json
+        working-directory: ${{ env.working-directory }}
     
-    - name: Post Infracost comment
-      run: |
-        infracost comment github --path /tmp/infracost.json \
-                                 --repo $GITHUB_REPOSITORY \
-                                 --github-token ${{github.token}} \
-                                 --pull-request ${{github.event.pull_request.number}} \
-                                 --behavior update
-
-
-        
+      - name: Post Infracost comment
+        run: |
+          infracost comment github --path /tmp/infracost.json \
+                                  --repo $GITHUB_REPOSITORY \
+                                  --github-token ${{github.token}} \
+                                  --pull-request ${{github.event.pull_request.number}} \
+                                  --behavior update
