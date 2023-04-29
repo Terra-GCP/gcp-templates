@@ -36,7 +36,7 @@ deny[reason] {
 #................................. Deny if project does not match ................................#
 
 # Restrict all resources to one project
-required_project = "gcp-prod-project"
+required_project = "prj-n-15032023-nprd-uat-svc"
 
 deny[msg] {
 	resource := tfplan.resource_changes[_]
@@ -52,7 +52,7 @@ deny[msg] {
 
 # Enforce a list of allowed locations / availability zones
 allowed_locations = {
-    "google": ["us-central1-a", "us-central1-b", "us-west1-a"]
+    "google": ["us-central1-a", "us-central1-b", "us-west1-a", "asia-south2-a"]
 }
 eval_expression(plan, expr) = constant_value {
     constant_value := expr.constant_value
@@ -85,7 +85,7 @@ deny[reason] {
 
 # Allowed sizes by provider
 allowed_types = {
-    "google": ["n1-standard-2", "e2-medium"]
+    "google": ["n1-standard-1", "e2-medium"]
 }
 
 # Attribute name for instance type/size by provider
@@ -152,7 +152,7 @@ deny[msg] {
 	msg := sprintf("%q: Protocol %q is not allowed. Must be tcp", [resource.address, allow.protocol])
 }
 
-#........................................ Block banned ports ......................................#
+...................................... Block banned port number ..................................#
 
 # Ban ports
 banned_ports = ["80", "22"]
@@ -168,7 +168,7 @@ deny[msg] {
 	msg := sprintf("%q: Port %q is not allowed.", [resource.address, port])
 }
 
-#....................................... Block banned labels ......................................#
+#....................................... Block banned labels .....................................#
 
 banned_labels = {
                 "env": "1",
@@ -185,7 +185,7 @@ deny[msg] {
 	msg := sprintf("%q: Label %q is not allowed.", [resource.address, labels])
 }
 
-#............................... Warn Resources create/delete labels ...............................#
+#............................... Warn Resources create/delete labels .............................#
 
 warn[sprintf(message, [action, resource.address])] {
   message  := "action '%s' requires human review (%s)"
