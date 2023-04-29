@@ -152,7 +152,7 @@ deny[msg] {
 	msg := sprintf("%q: Protocol %q is not allowed. Must be tcp", [resource.address, allow.protocol])
 }
 
-...................................... Block banned port number ..................................#
+#...................................... Block banned port number .................................#
 
 # Ban ports
 banned_ports = ["80", "22"]
