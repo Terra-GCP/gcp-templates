@@ -23,6 +23,9 @@ jobs:
       # Runs a single command using the runners shell
     - uses: actions/checkout@v3
     - uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.1.7
+        terraform_wrapper: false
 
     - uses: actions/checkout@v3
     - uses: open-policy-agent/setup-opa@v2
@@ -34,11 +37,19 @@ jobs:
       with:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}
-        
-    - name: Run OPA Tests
+
+    - name: Run OPA Tests      
       run: |
         cd gcp-resources/template/
-        terraform init
-        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="tfplan.plan"
-        terraform show -json tfplan.plan > tfplan.json
-        opa eval --format pretty --data ../opa-policy/policy.rego --input tfplan.json "data.terraform"
+        cp ../opa-policy/policy.rego .
+
+        LATEST_VERSION=$(wget -O - "https://api.github.com/repos/open-policy-agent/conftest/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | cut -c 2-)
+        wget "https://github.com/open-policy-agent/conftest/releases/download/v${LATEST_VERSION}/conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz"
+        tar xzf conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz 
+        sudo mv conftest /usr/local/bin
+
+        terraform init -upgrade
+        terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="resources.plan"
+        terraform show -json resources.plan > resources.json
+        conftest test resources.json -p policy.rego
+        
