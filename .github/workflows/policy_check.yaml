@@ -81,7 +81,10 @@ jobs:
 
       - name: Cost Estimation
         run: |
+          echo -e "${CYAN_BOLD}  Estimating Cost, Please wait.......!!!!"
           infracost breakdown --path resources.json
           infracost breakdown --path resources.json --format json --out-file /tmp/infracost.json
+
+          echo -e "${CYAN_BOLD} Below is the Cost Comparison.......!!!!"
           infracost diff --path resources.json
         working-directory: ${{ env.working-directory }}
