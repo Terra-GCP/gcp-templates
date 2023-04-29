@@ -32,12 +32,18 @@ jobs:
           version: latest
           terraform_wrapper: false
       
-      - name: Terraform init
-        run: terraform init -upgrade
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
         with:
             credentials_json: ${{secrets.GCP_SA_KEY}}
-            service_account: ${{secrets.GCP_SA_EMAIL}}        
-            working-directory: ${{ env.working-directory }}
+            service_account: ${{secrets.GCP_SA_EMAIL}}
+      
+      - name: Terraform init
+        run: terraform init -upgrade
+        env:
+          credentials_json: ${{secrets.GCP_SA_KEY}}
+          service_account: ${{secrets.GCP_SA_EMAIL}}        
+        working-directory: ${{ env.working-directory }}
         
       - name: Terraform Plan
         run: terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="resources.plan"
