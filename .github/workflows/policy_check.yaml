@@ -36,7 +36,7 @@ jobs:
         with:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}        
-        working-directory: ${{ env.working-directory }}
+          working-directory: ${{ env.working-directory }}
         run: terraform init -upgrade
 
       - name: Terraform Plan
