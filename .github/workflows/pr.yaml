@@ -5,6 +5,9 @@ on:
     workflows: ["OPA Policy"]
     types:
       - completed
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   pull-request:
@@ -29,4 +32,3 @@ jobs:
         pr_allow_empty: true                                        # Creates pull request even if there are no changes
         github_token: ${{secrets.GITHUB_TOKEN}}                     # If blank, default: secrets.GITHUB_TOKEN
 
-        
