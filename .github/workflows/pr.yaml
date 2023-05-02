@@ -1,4 +1,4 @@
-name: CI Merge
+name: PR
 # Only trigger, when the policy workflow succeeded
 on:
   workflow_run:
