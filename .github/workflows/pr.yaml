@@ -15,8 +15,8 @@ jobs:
       uses: repo-sync/pull-request@v2
       with:
         source_branch: ""                                           # If blank, default: triggered branch
-        destination_branch: main                                    # If blank, default: master
-        pr_title: "Merge_into_Main"                                 # Title of pull request
+        destination_branch: master                                  # If blank, default: master
+        pr_title: "Merge_into_Master"                               # Title of pull request
         pr_body: |                                                  # Full markdown support, requires pr_title to be set
           :crown: *An Automated PR*
 
