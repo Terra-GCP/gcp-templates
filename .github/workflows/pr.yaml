@@ -1,0 +1,33 @@
+name: PR
+# Only trigger, when the policy workflow succeeded
+on:
+  workflow_run:
+    workflows: ["OPA Policy"]
+    types:
+      - completed
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: pull-request
+      uses: repo-sync/pull-request@v2
+      with:
+        source_branch: ""                                           # If blank, default: triggered branch
+        destination_branch: master                                  # If blank, default: master
+        pr_title: "Merge_into_Master"                               # Title of pull request
+        pr_body: |                                                  # Full markdown support, requires pr_title to be set
+          :crown: *An Automated PR*
+
+          _Created by [repo-sync/pull-request](https://github.com/repo-sync/pull-request)_
+        pr_template: ".github/workflows/PULL_REQUEST_TEMPLATE.md"   # Path to pull request template, requires pr_title to be set, excludes pr_body
+        pr_reviewer: parteekbhardwaj                                # Comma-separated list (no spaces)
+        pr_assignee: parteekbhardwaj                                # Comma-separated list (no spaces)
+        pr_label: "auto-pr"                                         # Comma-separated list (no spaces)
+        pr_draft: false                                             # Creates pull request as draft
+        pr_allow_empty: true                                        # Creates pull request even if there are no changes
+        github_token: ${{secrets.GITHUB_TOKEN}}                     # If blank, default: secrets.GITHUB_TOKEN

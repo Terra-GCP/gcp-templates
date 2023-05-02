@@ -1,0 +1,101 @@
+name: OPA Policy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "Test" branch
+  push:
+    branches: 
+      - Test
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  TF-OPA-Check:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    env:
+      working-directory: gcp-resources/template/
+    
+    name: TF-OPA-Check
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          version: latest
+          terraform_wrapper: false
+      
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+            credentials_json: ${{secrets.GCP_SA_KEY}}
+            service_account: ${{secrets.GCP_SA_EMAIL}}
+      
+      - name: Terraform init
+        run: terraform init -upgrade
+        env:
+          credentials_json: ${{secrets.GCP_SA_KEY}}
+          service_account: ${{secrets.GCP_SA_EMAIL}}        
+        working-directory: ${{ env.working-directory }}
+        
+      - name: Terraform Plan
+        run: terraform plan -var-file="../input-json-file/resources.tfvars.json" -out="resources.plan"
+        env:
+          credentials_json: ${{secrets.GCP_SA_KEY}}
+          service_account: ${{secrets.GCP_SA_EMAIL}}        
+        working-directory: ${{ env.working-directory }}
+      
+      - name: Terraform Show
+        run: terraform show -json resources.plan > resources.json
+        env:
+          credentials_json: ${{secrets.GCP_SA_KEY}}
+          service_account: ${{secrets.GCP_SA_EMAIL}}
+        working-directory: ${{ env.working-directory }}
+
+      - name: OPA Policy Check
+        run: |
+          LATEST_VERSION=$(wget -O - "https://api.github.com/repos/open-policy-agent/conftest/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | cut -c 2-)
+          wget "https://github.com/open-policy-agent/conftest/releases/download/v${LATEST_VERSION}/conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz"
+          tar xzf conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz 
+          sudo mv conftest /usr/local/bin
+
+          cp ../opa-policy/policy.rego .
+          conftest test resources.json -p policy.rego
+        env:
+          credentials_json: ${{secrets.GCP_SA_KEY}}
+          service_account: ${{secrets.GCP_SA_EMAIL}}
+        working-directory: ${{ env.working-directory }}
+
+      
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v1
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+
+      - name: Cost Estimation
+        run: |
+          echo -e "${CYAN_BOLD}  Estimating Cost, Please wait.......!!!!"
+          infracost breakdown --path resources.json
+          infracost breakdown --path resources.json --format json --out-file /tmp/infracost.json
+
+          echo -e "${CYAN_BOLD} Below is the Cost Comparison.......!!!!"
+          infracost diff --path resources.json
+        working-directory: ${{ env.working-directory }}
+
+      - name: Generate Infracost Report
+        run: |
+          export INFRACOST_API_KEY=${{ secrets.INFRACOST_API_KEY }}
+          infracost output --path /tmp/infracost.json --show-skipped --format html --out-file report.html
+        working-directory: ${{ env.working-directory }}
+
+      - uses: actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb
+        with:
+          name: report.html
+          path: ${{ env.working-directory }}/report.html
