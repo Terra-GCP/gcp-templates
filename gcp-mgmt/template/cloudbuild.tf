@@ -33,9 +33,15 @@ module "build_trigger" {
   filename                      = each.value.filename
   filter                        = each.value.filter
 
-  git_file_source               = each.value.git_file_source
+  git_file_source               = {
+    path                        = each.value.path
+    uri                         = git_file_source.value.uri
+    repo_type                   = git_file_source.value.repo_type 
+    revision                    = git_file_source.value.revision
+    github_enterprise_config    = git_file_source.value.github_enterprise_config 
+    }
   repository_event_config       = each.value.repository_event_config
-  source_to_build               = each.value.source_to_build
+  source_to_build               = each.source_to_build.value
 
   ignored_files                 = each.value.ignored_files
   included_files                = each.value.included_files
@@ -45,19 +51,9 @@ module "build_trigger" {
   bitbucket_server_trigger_config = each.value.bitbucket_server_trigger_config
   pubsub_config                 = each.value.pubsub_config
   webhook_config                = each.value.webhook_config
-  approval_config               = each.value.approval_config
+  approval_config               = each.value.approval_config.value
   build                         = each.value.build
 
   location                      = each.value.location
   project_id                    = each.value.project_id
-
-
-
-  trigger_name                  = each.value.trigger_name 
-  path                          = each.value.path
-  uri                           = each.value.uri
-  repo_type                     = each.value.repo_type
-  revision                      = each.value.revision
-  topic                         = each.value.topic
-  approval_required             = each.value.approval_required
 }
