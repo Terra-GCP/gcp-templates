@@ -23,11 +23,37 @@ module "build_trigger" {
     }
   source                        = "git@github.com:Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-build-trigger"
   depends_on                    = [module.build_connection]
-  trigger_name                  = each.value.trigger_name 
-  location                      = each.value.location
-  disabled                      = each.value.disabled
-  project_id                    = each.value.project_id
+  name                          = each.value.name
   description                   = each.value.description
+  tags                          = each.value.tags
+  disabled                      = each.value.disabled
+  substitutions                 = each.value.substitutions
+  service_account               = each.value.service_account
+  include_build_logs            = each.value.build_logs
+  filename                      = each.value.filename
+  filter                        = each.value.filter
+
+  git_file_source               = each.value.git_file_source
+  repository_event_config       = each.value.repository_event_config
+  source_to_build               = each.value.source_to_build
+
+  ignored_files                 = each.value.ignored_files
+  included_files                = each.value.included_files
+
+  trigger_template              = each.value.trigger_template
+  github                        = each.value.github
+  bitbucket_server_trigger_config = each.value.bitbucket_server_trigger_config
+  pubsub_config                 = each.value.pubsub_config
+  webhook_config                = each.value.webhook_config
+  approval_config               = each.value.approval_config
+  build                         = each.value.build
+
+  location                      = each.value.location
+  project_id                    = each.value.project_id
+
+
+
+  trigger_name                  = each.value.trigger_name 
   path                          = each.value.path
   uri                           = each.value.uri
   repo_type                     = each.value.repo_type

@@ -66,9 +66,7 @@ jobs:
           tar xzf conftest_${LATEST_VERSION}_Linux_x86_64.tar.gz 
           sudo mv conftest /usr/local/bin
 
-          cp ../opa-policy/policy.rego .
-          opa eval --format pretty --data policy.rego --input resources.json "data.main"
-          conftest test resources.json -p policy.rego
+          conftest test resources.json -p policy.rego --output=table
         env:
           credentials_json: ${{secrets.GCP_SA_KEY}}
           service_account: ${{secrets.GCP_SA_EMAIL}}
