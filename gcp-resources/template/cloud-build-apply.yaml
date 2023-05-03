@@ -1,0 +1,21 @@
+steps:  
+  - id: 'tf apply'
+    name: 'hashicorp/terraform:latest'
+    entrypoint: 'sh'
+    args: 
+    - '-c'
+    - | 
+
+        CYAN_BOLD='\033[1;96m'
+        echo -e "${CYAN_BOLD}-------------------------------------------------------------------------------------"
+        echo -e "${CYAN_BOLD}-------------------------------------------------------------------------------------"
+
+        echo -e "${CYAN_BOLD}#......Provisioning Initiated...please be patient !......#"
+         
+        ls -lrt; cd gcp-resources/template/
+        
+        cp ../input-json-file/resources.tfvars.json .
+        pwd; mv resources.tfvars.json resources.auto.tfvars.json
+        
+        terraform init -upgrade
+        terraform apply -auto-approve
