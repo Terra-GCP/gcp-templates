@@ -179,10 +179,24 @@ deny[msg] {
 	resource := tfplan.resource_changes[_]
   
     labels := resource.change.after.labels["group"]
-    #not labels == banned_labels
+    not labels == banned_labels
 
 
 	msg := sprintf("%q: Label %q is not allowed.", [resource.address, labels])
+}
+
+#................................ Deny if tags does not match .............................#
+
+allowed_tags = ["nprod-ingress-allow","nprod-egress-allow"]
+
+deny[msg] {
+	resource := tfplan.resource_changes[_]
+    action := resource.change.actions[count(resource.change.actions) - 1]
+    array_contains(["create", "update"], action)
+    tags := resource.change.after.tags[_]
+    not array_contains(allowed_tags, tags)
+
+	msg := sprintf("%s: Supplied firewall tag %q is not allowed",[resource.address, allowed_tags])
 }
 
 #............................... Warn Resources create/delete labels .............................#

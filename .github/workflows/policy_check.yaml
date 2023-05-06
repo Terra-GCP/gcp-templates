@@ -67,6 +67,7 @@ jobs:
           sudo mv conftest /usr/local/bin
 
           cp ../opa-policy/policy.rego .
+          conftest test resources.json -p policy.rego
           conftest test resources.json -p policy.rego -o table
         env:
           credentials_json: ${{secrets.GCP_SA_KEY}}
