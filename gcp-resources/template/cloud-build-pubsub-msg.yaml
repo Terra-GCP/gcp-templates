@@ -6,4 +6,4 @@ steps:
     - '-c'
     - | 
           gcloud config set prj-o-15032023-build
-          gcloud pubsub topics publish projects/prj-o-15032023-build/topics/stop-instance-event --message-body '{"zone":"us-west1-b", "label":"env=dev"}'
+          gcloud pubsub topics publish projects/prj-o-15032023-build/topics/stop-instance-event --message-body '{"zone":"asia-south2-a", "label":"env=dev"}'
