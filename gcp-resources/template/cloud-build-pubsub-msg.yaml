@@ -5,5 +5,5 @@ steps:
     args: 
     - '-c'
     - | 
-          gcloud config set prj-o-15032023-build
-          gcloud pubsub topics publish projects/prj-o-15032023-build/topics/stop-instance-event --message-body '{"zone":"asia-south2-a", "label":"env=dev"}'
+          gcloud config set project prj-o-15032023-build
+          gcloud functions call stopInstancePubSub \--data '{"data":"eyJ6b25lIjoiYXNpYS1zb3V0aDItYSIsICJsYWJlbCI6ImVudj1kZXYifQ=="}'
