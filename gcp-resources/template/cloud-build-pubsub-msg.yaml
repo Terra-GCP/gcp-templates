@@ -5,5 +5,5 @@ steps:
     args: 
     - '-c'
     - | 
-          gcloud config set project prj-o-15032023-build
+          gcloud config set project 	prj-n-15032023-nprd-uat-svc
           gcloud functions call stopInstancePubSub \--data '{"data":"eyJ6b25lIjoiYXNpYS1zb3V0aDItYSIsICJsYWJlbCI6ImVudj1kZXYifQ=="}'
