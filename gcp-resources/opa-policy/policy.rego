@@ -179,10 +179,52 @@ deny[msg] {
 	resource := tfplan.resource_changes[_]
   
     labels := resource.change.after.labels["group"]
-    #not labels == banned_labels
+    not labels == banned_labels
 
 
 	msg := sprintf("%q: Label %q is not allowed.", [resource.address, labels])
+}
+
+#................................ Deny if tags does not match .............................#
+
+allowed_tags = ["nprod-ingress-allow","nprod-egress-allow"]
+
+deny[msg] {
+	resource := tfplan.resource_changes[_]
+    action := resource.change.actions[count(resource.change.actions) - 1]
+    array_contains(["create", "update"], action)
+    tags := resource.change.after.tags[_]
+    not array_contains(allowed_tags, tags)
+
+	msg := sprintf("%s: Supplied firewall tag %q is not allowed",[resource.address, allowed_tags])
+}
+
+#................................ Deny if OS image does not match .............................#
+
+allowed_image = ["rhel-cloud/rhel-8",]
+
+deny[msg] {
+	resource := tfplan.resource_changes[_]
+    action := resource.change.actions[count(resource.change.actions) - 1]
+    array_contains(["create", "update"], action)
+    image := resource.change.after.boot_disk.initialize_params.image[_]
+    not array_contains(allowed_image, boot_disk.initialize_params.image)
+
+	msg := sprintf("%s: Selected OS Image %q is not allowed",[resource.address, allowed_image])
+}
+
+#................................ Deny if subnet does not match .............................#
+
+allowed_subnetwork = ["projects/prj-o-15032023-nprd-shr-nw/regions/asia-south2/subnetworks/sub-as2-o-shr-nonprod",]
+
+deny[msg] {
+    resource := tfplan.resource_changes[_]
+    action := resource.change.actions[count(resource.change.actions) - 1]
+    array_contains(["create", "update"], action)
+    subnetwork := resource.change.after.subnetwork[_]
+    not array_contains(allowed_subnetwork, subnetwork)
+
+	msg := sprintf("%s: Selected subnet %q is not allowed",[resource.address, allowed_subnetwork])
 }
 
 #............................... Warn Resources create/delete labels .............................#
