@@ -8,3 +8,9 @@ git commit -m "Push-24-March-2023"
 git status
 git push
 git push --set-upstream origin master
+
+for github actions:
+
+git tag v1.2
+git push origin --tags
+git tag status

@@ -4,7 +4,9 @@ module "VM" {
   for_each = {
       for k, v in var.vms: k => v
       }
-  source        = "git::https://github.com/Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-instance" # "../../modules/terraform-google-cloud-instance"
+  source        = "git::https://source.developers.google.com/p/prj-o-tf-sa/r/github_terra-gcp_gcp-kitchen-modules//terraform-google-cloud-instance"
+                # "git::https://github.com/Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-instance" 
+                # "../../modules/terraform-google-cloud-instance"
   name          = each.value.name
   project_id    = each.value.project_id
   zone          = each.value.zone
