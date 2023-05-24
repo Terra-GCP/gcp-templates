@@ -54,6 +54,7 @@ deny[msg] {
   
   project_id := resource.change.after.project
   not project_id == required_project
+  not array_contains(required_project, project_id)
 
 	msg := sprintf("%q: Project %q is not allowed. Must be %q", [resource.address, project_id, required_project])
 }
@@ -63,7 +64,7 @@ deny[msg] {
 
 # Enforce a list of allowed locations / availability zones
 allowed_locations = {
-    "google": ["us-central1-a", "europe-north1-a", "asia-south1-a", "asia-south1-b"]
+    "google": ["us-central1-a", "europe-north1-a", "asia-south1-a", "asia-south2-a"]
 }
 eval_expression(plan, expr) = constant_value {
     constant_value := expr.constant_value
@@ -202,33 +203,30 @@ deny[msg] {
 	msg := sprintf("%q: Label %q is not allowed.", [resource.address, labels])
 }
 
-#................................. Deny if instance iam binding members does not match ................................#
-
-# Restrict all resources to one project
-required_members = ["user:niketa.kulshrestha@hcl.com","user:vandana_sharma@hcl.com","user:premkumar-r@hcl.com"]
-
-deny[msg] {
-	resource := tfplan.resource_changes[_]
-  
-  members := resource.change.after.members
-  not members == required_members
-
-	msg := sprintf("%q: Member %q is not allowed. Must be %q", [resource.address, members, required_members])
-}
-
-
 #................................ Deny if tags does not match .............................#
 
 allowed_tags = ["nprod-ingress-allow","nprod-egress-allow"]
 
 deny[msg] {
 	resource := tfplan.resource_changes[_]
-    action := resource.change.actions[count(resource.change.actions) - 1]
-    array_contains(["create", "update"], action)
     tags := resource.change.after.tags[_]
     not array_contains(allowed_tags, tags)
 
-	msg := sprintf("%s: Supplied firewall tag %q is not allowed",[resource.address, allowed_tags])
+	msg := sprintf("%q: Supplied firewall tag %q is not allowed. Must be %q", [resource.address, tags, allowed_tags])
+
+}
+
+#................................. Deny if instance iam binding members does not match ................................#
+
+allowed_members = ["user:niketa.kulshrestha@hcl.com","user:vandana_sharma@hcl.com","user:premkumar-r@hcl.com"]
+
+deny[msg] {
+	resource := tfplan.resource_changes[_]
+    members := resource.change.after.members[_]
+    not array_contains(allowed_members, members)
+
+	msg := sprintf("%q: User/s %q not allowed. Must be %q", [resource.address, members, allowed_members])
+
 }
 
 #................................ Warn Resources create/delete .............................#
