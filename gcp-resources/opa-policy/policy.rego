@@ -19,6 +19,7 @@ get_basename(path) = basename{
 
 allowed_resources = [
 "google_compute_instance",
+"google_compute_instance_iam_binding",
 "google_os_config_patch_deployment",
 "google_compute_instance_group",
 "google_compute_resource_policy",
