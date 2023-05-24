@@ -26,3 +26,17 @@ module "VM" {
 https
 "git::https://github.com/Terra-GCP/gcp-kitchen-modules//terraform-google-cloud-instance" */
 
+module "instance_iam_binding" {
+  for_each = {
+      for k, v in var.instance_iam_binding: k => v
+      }
+  depends_on            = [module.VM]
+  source                = "git@github.com:Terra-GCP/gcp-kitchen-modules//terraform-google-compute-instance-iams" # "../../modules/terraform-google-cloud-project-iam"
+  instance_name         = each.value.instance_name
+  zone                  = each.value.zone
+  project_id            = each.value.project_id
+  members               = each.value.members
+  roles                 = each.value.roles
+  condition             = {}
+  
+}

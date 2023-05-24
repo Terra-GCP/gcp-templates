@@ -20,6 +20,17 @@ get_basename(path) = basename{
 allowed_resources = [
 "google_compute_instance",
 "google_os_config_patch_deployment",
+"google_compute_instance_group",
+"google_compute_resource_policy",
+"google_sql_database_instance",
+"google_filestore_instance",
+"google_storage_bucket",
+"google_compute_address",
+"google_compute_disk",
+"google_compute_firewall",
+"google_compute_network",
+"google_compute_subnetwork",
+"google_service_account"
 ]
 
 deny[reason] {
@@ -36,7 +47,7 @@ deny[reason] {
 #................................. Deny if project does not match ................................#
 
 # Restrict all resources to one project
-required_project = "prj-n-15032023-nprd-uat-svc"
+required_project = ["prj-n-15032023-nprd-uat-svc", "prj-n-15032023-nprd-dev-nsvc", "prj-p-15032023-prd-svc", "prj-p-15032023-prd-nsvc"]
 
 deny[msg] {
 	resource := tfplan.resource_changes[_]
@@ -48,11 +59,11 @@ deny[msg] {
 }
 
 
-#.............................. Deny if region/zome does not match ...............................#
+#.............................. Deny if region/zone does not match ...............................#
 
 # Enforce a list of allowed locations / availability zones
 allowed_locations = {
-    "google": ["us-central1-a", "us-central1-b", "us-west1-a", "asia-south2-a"]
+    "google": ["us-central1-a", "europe-north1-a", "asia-south1-a", "asia-south1-b"]
 }
 eval_expression(plan, expr) = constant_value {
     constant_value := expr.constant_value
@@ -155,7 +166,7 @@ deny[msg] {
 #...................................... Block banned port number .................................#
 
 # Ban ports
-banned_ports = ["80", "22"]
+banned_ports = ["3389", "22"]
 
 deny[msg] {
 	resource := tfplan.resource_changes[_]
@@ -171,8 +182,14 @@ deny[msg] {
 #....................................... Block banned labels .....................................#
 
 banned_labels = {
-                "env": "1",
-                "linux_patch_mgmt": "enabled"
+                    "app_id" : "1234", 
+                    "env" : "nprd", 
+                    "os" : "rhel-n", 
+                    "role" : "webserver", 
+                    "cost_center" : "001", 
+                    "business_unit" : "devops", 
+                    "project_id" : "prj-xxxxx-id", 
+                    "linux_patch_mgmt": "enabled"
                 }
 
 deny[msg] {
@@ -184,6 +201,21 @@ deny[msg] {
 
 	msg := sprintf("%q: Label %q is not allowed.", [resource.address, labels])
 }
+
+#................................. Deny if instance iam binding members does not match ................................#
+
+# Restrict all resources to one project
+required_members = ["user:niketa.kulshrestha@hcl.com","user:vandana_sharma@hcl.com","user:premkumar-r@hcl.com"]
+
+deny[msg] {
+	resource := tfplan.resource_changes[_]
+  
+  members := resource.change.after.members
+  not members == required_members
+
+	msg := sprintf("%q: Member %q is not allowed. Must be %q", [resource.address, members, required_members])
+}
+
 
 #................................ Deny if tags does not match .............................#
 
@@ -199,7 +231,7 @@ deny[msg] {
 	msg := sprintf("%s: Supplied firewall tag %q is not allowed",[resource.address, allowed_tags])
 }
 
-#............................... Warn Resources create/delete labels .............................#
+#................................ Warn Resources create/delete .............................#
 
 warn[sprintf(message, [action, resource.address])] {
   message  := "action '%s' requires human review (%s)"

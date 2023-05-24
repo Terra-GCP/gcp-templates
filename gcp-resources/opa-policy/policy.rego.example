@@ -44,8 +44,6 @@ deny[msg] {
 
 allowed_resources = [
 "google_compute_address",
-"google_compute_address",
-"google_compute_disk",
 "google_compute_disk",
 "google_compute_firewall",
 "google_compute_network",
