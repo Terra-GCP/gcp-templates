@@ -1,6 +1,7 @@
 steps:
 - name: 'google/cloud-sdk:latest'
   script: |
+    #!/usr/bin/env bash
     #PROJECT="prj-n-15032023-nprd-uat-svc"
 
     # Get PAIRS (NAME,ZONE) for all disk in ${PROJECT}
