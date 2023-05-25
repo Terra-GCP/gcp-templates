@@ -6,5 +6,6 @@ steps:
     - '-c'
     - | 
           gcloud config set project prj-n-15032023-nprd-uat-svc
-          cd gcp-resources/template/
+          ls -lrt; cd gcp-resources/template/
+          chmod 700 disk.sh
           ./disk.sh
