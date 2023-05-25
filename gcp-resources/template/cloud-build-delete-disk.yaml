@@ -6,13 +6,12 @@ steps:
     - '-c'
     - | 
           gcloud config set project prj-n-15032023-nprd-uat-svc
-          PROJECT="prj-n-15032023-nprd-uat-svc"
 
           # Get PAIRS (NAME,ZONE) for all disk in ${PROJECT}
           # Using CSV  (e.g. my-disk,my-zone) enables IFS parsing (below)
           PAIRS=$(\
             gcloud compute disks list \
-            --project=${PROJECT} \
+            --project="prj-n-15032023-nprd-uat-svc" \
             --format="csv[no-heading](name,zone.scope())")
 
           # Iterate over the PAIRS
