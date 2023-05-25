@@ -239,3 +239,4 @@ warn[sprintf(message, [action, resource.address])] {
   action   := resource.change.actions[_]
   review[action]
 }
+
