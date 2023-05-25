@@ -8,17 +8,17 @@ steps:
     PAIRS=$(\
       gcloud compute disks list \
       --project="prj-n-15032023-nprd-uat-svc" \
-    --format="csv[no-heading](name,zone.scope())")
+      --format="csv[no-heading](name,zone.scope())")
 
     # Iterate over the PAIRS
     for PAIR in ${PAIRS}
     do
       # Extract values of NAME,ZONE from PAIR
       IFS=, read NAME ZONE <<< ${PAIR}
-    # Describe
-    printf "Attempting to delete disk: %s [%s]\n" ${NAME} ${ZONE}
-    # Deleting a disks should only succeed if not attached
-    gcloud compute disks delete ${NAME} \
+      # Describe
+      printf "Attempting to delete disk: %s [%s]\n" ${NAME} ${ZONE}
+      # Deleting a disks should only succeed if not attached
+      gcloud compute disks delete ${NAME} \
       --zone=${ZONE} \
       --project="prj-n-15032023-nprd-uat-svc" \
       --quiet
